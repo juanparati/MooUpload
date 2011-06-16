@@ -15,9 +15,11 @@ requires:
   	- Fx.Elements
   	- Fx.Tween  
 
-provides:[MooUpload]
+provides: [MooUpload]
+
 ...
 */
+
 
 var progressSupport = ('onprogress' in new Browser.Request);
 
