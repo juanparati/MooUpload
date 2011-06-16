@@ -11,8 +11,7 @@ authors:
 	- Juan Lago <juanparati[at]gmail[dot]com>
 
 provides:
-	- MooUpload
-	- Request.sendBlob
+	- MooUpload	
 	
 requires: 
 	- core/1.3.2: 
