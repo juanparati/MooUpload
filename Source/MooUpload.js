@@ -1,6 +1,6 @@
 /*
 ---
-script: MooUpload
+name: MooUpload
 
 description: Crossbrowser file upload.
 
@@ -15,8 +15,7 @@ requires:
   	- Fx.Elements
   	- Fx.Tween  
 
-provides: 
-	- mooupload
+provides: [MooUpload]
 ...
 */
 
