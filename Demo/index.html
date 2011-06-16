@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<title>HTML5 uploader</title>
+
+<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css">
+<link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
+<style type="text/css">
+body {
+	padding: 8px;
+	margin: 0;
+	font-family: 'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+}
+
+h1 {
+	font-size: 30px;
+	font-weight: bold;
+	color: #202020;
+	text-transform: uppercase; 
+}
+
+
+h2 {
+	margin-top: 80px;
+	font-size: 18px;
+	color: #616161; 
+}
+
+.half {
+	width: 50%;
+}
+</style>
+
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/mootools/1.3.2/mootools.js"></script>
+
+<script type="text/javascript" src="../Source/mooupload.js"></script>
+
+<script type="text/javascript">
+window.addEvent('domready', function() {
+  
+  // Basic example
+	new MooUpload('filecontrol1', {
+  	action: 'upload.php',		// Server side upload script
+  	method: 'auto'					// Automatic upload method (Choose the best)
+	});
+	
+	// Autostart without listview
+	new MooUpload('filecontrol2', {
+		action: 'upload.php',		// Server side upload script
+		method: 'html4',				// Use only HTML4 method
+		listview: false,				// Disable listview
+		autostart: true,				// Force upload autostart 
+	});
+  
+  
+  // Upload only with HTML5 using triggers and multiple selection
+  var myUpload = new MooUpload('filecontrol3', {    
+    action: 'upload.php',		// Server side upload script    
+    method: 'html5',				// Use only HTML5 method
+    blocksize: 102400,			// Chunk size
+		onAddFiles: function() {
+			alert('Thank for add file(s)');
+		},
+		onFinishUpload: function() {
+			var finishlist = '';
+			
+			for (var i = 0, f; f = this.filelist[i]; i++) {
+				
+				if (!f.error && f.uploaded)
+					finishlist += f.name + ' with '+f.size+" bytes has been uploaded\n"; 	
+			}    
+			
+			alert(finishlist);
+		} 		                       
+  });
+  
+  
+  // Upload only with Flash with single selection and selector filter
+  var myUpload = new MooUpload('filecontrol4', {    
+    action: 'upload.php',		// Server side upload script    
+    method: 'flash',				// Use only Flash method
+    multiple: false,				// Force to single selection    
+		accept: 'image/*'				// Accept only images (Only works with Flash and partially with HTML5)    		 		                       
+  });
+  
+});
+</script>
+
+</head>
+<body>
+<h1>MooUpload examples</h1>
+
+<p>
+<h2>1) Basic example using the best upload method</h2>
+<div id="filecontrol1" class="half"></div>
+</p>
+
+<p>
+<h2>2) Autostart without listview using HTML4</h2>
+<div id="filecontrol2" class="half"></div>
+</p>
+
+<p>
+<h2>3) Upload only with HTML5 using triggers and multiple selection</h2>
+<div id="filecontrol3" class="half"></div>
+</p>
+
+<p>
+<h2>4) Upload only with Flash with single selection and selector filter</h2>
+<div id="filecontrol4" class="half"></div>
+</p>
+
+</body>
+</html>
