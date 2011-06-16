@@ -1,18 +1,22 @@
 /*
 ---
-script: mooupload.js
-license: GNU/GPL license.
 description: Crossbrowser file upload.
-copyright: Copyright (c) Juan Lago D.
-authors: [Juan Lago <juanparati[at]gmail[dot]com>
+
+license: GNU/GPL license.
+
+authors: 
+- Juan Lago <juanparati[at]gmail[dot]com>
+
 
 requires: 
-  core:1.3.2: 
+- core:1.3.2: 
   - Element.Event
   - Fx.Elements
   - Fx.Tween  
-provides: [MooUpload]
-A method for upload files that not sucks!
+
+provides: [MooUpload, Request.sendBlob]
+
+...
 */
 
 var progressSupport = ('onprogress' in new Browser.Request);
