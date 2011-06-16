@@ -7,14 +7,15 @@ license: GNU/GPL license.
 authors: 
 - Juan Lago <juanparati[at]gmail[dot]com>
 
-
 requires: 
 - core:1.3.2: 
   - Element.Event
   - Fx.Elements
   - Fx.Tween  
 
-provides: [MooUpload, Request.sendBlob]
+provides:
+- MooUpload
+- Request.sendBlob
 
 ...
 */
