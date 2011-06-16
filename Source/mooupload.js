@@ -1,21 +1,18 @@
 /*
 ---
+
+name: MooUpload
+
 description: Crossbrowser file upload.
 
 license: GNU/GPL license.
 
 authors: 
-- Juan Lago <juanparati[at]gmail[dot]com>
+	- Juan Lago <juanparati[at]gmail[dot]com>
 
-requires: 
-- core:1.3.2: 
-  - Element.Event
-  - Fx.Elements
-  - Fx.Tween  
+requires: [Core/Class, Core/Element.Event, Core/Fx.Elements, Core/Fx.Tween]
 
-provides:
-- MooUpload
-- Request.sendBlob
+provides: [MooUpload, Request.sendBlob]
 
 ...
 */
