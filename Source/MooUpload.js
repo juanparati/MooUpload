@@ -15,7 +15,7 @@ requires:
   	- Fx.Elements
   	- Fx.Tween  
 
-provides: [MooUpload]
+provides:[MooUpload]
 ...
 */
 
