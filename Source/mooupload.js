@@ -2,9 +2,6 @@
 ---
 script: MooUpload
 
-provides: 
-	- MooUpload
-
 description: Crossbrowser file upload.
 
 license: GNU/GPL license.
@@ -18,7 +15,8 @@ requires:
   	- Fx.Elements
   	- Fx.Tween  
 
-
+provides: 
+	- mooupload
 ...
 */
 
