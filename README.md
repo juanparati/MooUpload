@@ -32,8 +32,8 @@ Dependencies
 	+ Fx.Tween
 
 
-Usage
------
+How to Use
+----------
 
 See demo
   
