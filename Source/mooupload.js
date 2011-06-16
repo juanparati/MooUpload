@@ -1,7 +1,6 @@
 /*
 ---
-
-name: MooUpload
+script: MooUpload
 
 description: Crossbrowser file upload.
 
@@ -9,16 +8,14 @@ license: GNU/GPL license.
 
 authors: 
 	- Juan Lago <juanparati[at]gmail[dot]com>
-
-provides:
-	- MooUpload	
 	
 requires: 
-	- core/1.3.2: 
+	core:1.3.2 
   	- Element.Event
   	- Fx.Elements
   	- Fx.Tween  
 
+provides: [MooUpload]
 ...
 */
 
