@@ -8,7 +8,7 @@ description: Crossbrowser file upload.
 license: GNU/GPL license.
 
 authors: 
-	- Juan Lago <juanparati[at]gmail[dot]com>
+	- Juan Lago
 
 requires: [Core/Class, Core/Element.Event, Core/Fx.Elements, Core/Fx.Tween]
 
