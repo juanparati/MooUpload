@@ -16,7 +16,7 @@ requires:
   - Core/Fx.Elements
   - Core/Fx.Tween  
 
-provides: [MooUpload, Request.sendBlob]
+provides:[MooUpload, Request.sendBlob]
 ...
 */
 
