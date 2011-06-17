@@ -3,8 +3,6 @@ MooUpload
 
 A crossbrowser uploader based in Mootools
 
-![Screenshot](http://www.livespanske.com/labs/MooUpload/imgs/MooUpload.png)
-
 Features
 --------
 
@@ -22,6 +20,12 @@ Features
 + Asynchronous file upload (only with HTML5 and Flash)  
 + Selector file type filter (Works only with Flash and partially with HTML5)
 ...
+
+
+Screenshots
+-----------
+
+![Screenshot 1](http://www.livespanske.com/labs/MooUpload/imgs/MooUpload.png)
 
 
 Dependencies
