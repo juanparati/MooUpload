@@ -6,17 +6,17 @@ description: Crossbrowser file uploader with HTML5 chunk upload support
 
 version: 0.98
 
-license: GPL
-
 authors: 
 	- Juan Lago
 	
-requires: 
+requires:
 	- Core/Element.Event
   - Core/Fx.Elements
   - Core/Fx.Tween  
 
 provides: [MooUpload, Request.sendBlob]
+
+license: GPL
 ...
 */
 
