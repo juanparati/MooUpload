@@ -4,6 +4,8 @@ name: MooUpload
 
 description: Crossbrowser file upload.
 
+version: 0.98
+
 license: GNU/GPL license.
 
 authors: 
@@ -15,7 +17,7 @@ requires:
   	- Fx.Elements
   	- Fx.Tween  
 
-provides: [MooUpload]
+provides: [MooUpload, Request.sendBlob]
 
 ...
 */
@@ -70,7 +72,7 @@ Request.implement({
 });
 
 
-// MooUpload class  
+// class MooUpload start  
 var MooUpload = new Class({
   Implements: [Options, Events],
   
@@ -1151,5 +1153,5 @@ var MooUpload = new Class({
     return pieces[pieces.length-1];
   }
       
-});
+}); // end MooUpload class
 
