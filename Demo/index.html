@@ -39,10 +39,10 @@ h2 {
 <script type="text/javascript">
 window.addEvent('domready', function() {
   
-  // Basic example
+  // Basic example using the best upload method (Autodetect the best method)
 	new MooUpload('filecontrol1', {
-  	action: 'upload.php',		// Server side upload script
-  	method: 'auto'					// Automatic upload method (Choose the best)
+  	action: 'upload.php',	// Server side upload script
+  	method: 'auto'				// Automatic upload method (Choose the best)
 	});
 	
 	// Autostart without listview
@@ -76,7 +76,7 @@ window.addEvent('domready', function() {
   });
   
   
-  // Upload only with Flash with single selection and selector filter
+  // Upload only with Flash with single selection and selector filter (only images)
   var myUpload = new MooUpload('filecontrol4', {    
     action: 'upload.php',		// Server side upload script    
     method: 'flash',				// Use only Flash method
@@ -92,7 +92,7 @@ window.addEvent('domready', function() {
 <h1>MooUpload examples</h1>
 
 <p>
-<h2>1) Basic example using the best upload method</h2>
+<h2>1) Basic example using the best upload method (Autodetect the best method)</h2>
 <div id="filecontrol1" class="half"></div>
 </p>
 
@@ -107,7 +107,7 @@ window.addEvent('domready', function() {
 </p>
 
 <p>
-<h2>4) Upload only with Flash with single selection and selector filter</h2>
+<h2>4) Upload only with Flash with single selection and selector filter (only images)</h2>
 <div id="filecontrol4" class="half"></div>
 </p>
 
