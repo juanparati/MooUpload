@@ -8,7 +8,7 @@ Features
 
 + HTML4 upload 
 + HTML5 chunk upload (Forget the server upload limitation) ;)
-+ Flash upload
++ Flash upload (Use Swiff.Uploader)
 + Automatic selection (Choose the best upload method)
 + Multiple file selection
 + Autostart upload option
