@@ -3,7 +3,10 @@
  *
  * Mooupload class
  * 
- * Provides a easy way for recept and save files from Mooupload
+ * Provides a easy way for recept and save files from MooUpload
+ * 
+ * DISCLAIMER: You must add your own special rules for limit the upload of
+ * insecure files like .php, .asp or .htaccess     
  * 
  * @author: Juan Lago <juanparati[at]gmail[dot].com>
  * 
@@ -54,7 +57,7 @@ class Mooupload
 	  foreach ($_FILES as $k => $file)
 	  {
 	    $response['key']         = (int)substr($k, strpos($k, self::container_index) + strlen(self::container_index));
-	    $response['name']        = $file['name'];
+	    $response['name']        = basename($file['name']);	// Basename for security issues
 	    $response['error']       = $file['error'];
 	    $response['size']        = $file['size'];
 	    $response['upload_name'] = $file['name'];
@@ -110,7 +113,7 @@ class Mooupload
 	  $limit = min($max_upload, $max_post, $memory_limit);
 	      
 	  $response['id']    	= $headers['X-File-Id'];
-	  $response['name']  	= $headers['X-File-Name'];
+	  $response['name']  	= basename($headers['X-File-Name']); 	// Basename for security issues
 	  $response['size']  	= $headers['Content-Length'];
 	  $response['error'] 	= UPLOAD_ERR_OK; 
 	  $response['finish'] = FALSE;
