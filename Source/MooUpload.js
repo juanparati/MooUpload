@@ -2,7 +2,7 @@
 ---
 name: MooUpload
 
-description: Crossbrowser file upload.
+description: Crossbrowser file uploader with HTML5 chunk upload support
 
 version: 0.98
 
@@ -12,13 +12,11 @@ authors:
 	- Juan Lago
 	
 requires: 
-	- core/1.3.2:
-		- Element.Event
-  	- Fx.Elements
-  	- Fx.Tween  
+	- Core/Element.Event
+  - Core/Fx.Elements
+  - Core/Fx.Tween  
 
 provides: [MooUpload, Request.sendBlob]
-
 ...
 */
 
