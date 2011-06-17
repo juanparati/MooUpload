@@ -9,7 +9,7 @@ version: 0.98
 license: GNU/GPL license.
 
 authors: 
-	- Juan Lago <juanparati[at]gmail[dot]com>
+	- Juan Lago
 	
 requires: 
 	- core/1.3.2:
