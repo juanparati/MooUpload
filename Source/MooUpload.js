@@ -12,8 +12,8 @@ authors:
 	- Juan Lago <juanparati[at]gmail[dot]com>
 	
 requires: 
-	core:1.3.2 
-  	- Element.Event
+	- core/1.3.2:
+		- Element.Event
   	- Fx.Elements
   	- Fx.Tween  
 
@@ -25,7 +25,11 @@ provides: [MooUpload, Request.sendBlob]
 
 var progressSupport = ('onprogress' in new Browser.Request);
 
-// Extend Request class for allow send binary files 
+/*
+Extend Request class for allow send binary files
+
+provides: [Request.sendblob]
+*/
 Request.implement({
 				
   sendBlob: function(blob){        
@@ -72,7 +76,11 @@ Request.implement({
 });
 
 
-// class MooUpload start  
+/*
+MooUpload class
+
+provides: [MooUpload]
+*/  
 var MooUpload = new Class({
   Implements: [Options, Events],
   
