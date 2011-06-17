@@ -6,7 +6,7 @@ description: Crossbrowser file uploader with HTML5 chunk upload support
 
 version: 0.98
 
-license: GNU/GPL license.
+license: GPL
 
 authors: 
 	- Juan Lago
