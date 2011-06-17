@@ -3,6 +3,7 @@ MooUpload
 
 A crossbrowser uploader based in Mootools
 
+![Screenshot](http://www.livespanske.com/labs/MooUpload/imgs/MooUpload.png)
 
 Features
 --------
