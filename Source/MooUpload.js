@@ -934,14 +934,14 @@ var MooUpload = new Class({
                       
     
     // Get slice method
-    if (Browser.firefox)     // For Mozilla 4.0+
-      chunk = file.mozSlice(start, total);
-    else if (Browser.chrome) // For Chrome and Safari
-      chunk = file.webkitSlice(start, total);
-    else                     // For Opera and standard browsers
-      chunk = file.slice(start, total);
-        
-            
+    if (file.mozSlice)					// Mozilla
+    	chunk = file.mozSlice(start, total)
+    else if (file.webkitSlice)	// Chrome, Safari and Konqueror and webkit based
+			chunk = file.webkitSlice(start, total);
+		else												// Opera and standards browsers
+			chunk = file.slice(start, total)	
+    
+                       
     var xhr = new Request({
       url: action,
       urlEncoded: false,
