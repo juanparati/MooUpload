@@ -89,7 +89,7 @@ var MooUpload = new Class({
     multiple: true,    
     autostart: false,
     listview: true,    
-    blocksize: 1024000,        // I don't recommend less of 101400 and not more of 5020000
+    blocksize: 512000,        // I don't recommend less of 101400 and not more of 5020000
     maxuploadspertime: 2, 
     minfilesize: 1,
     maxfilesize: 0,  
