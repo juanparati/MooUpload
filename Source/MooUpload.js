@@ -701,8 +701,7 @@ var MooUpload = new Class({
                                                 
 		    }.bind(this),
         
-        select: function(files) {        
-				alert(files[0]);                                        
+        select: function(files) {        				                                        
           this.addFiles(files[0], subcontainer);	  
           
           this.progressIni(document.id(subcontainer_id+'_progresscont'));               
