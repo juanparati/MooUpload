@@ -324,25 +324,13 @@ var MooUpload = new Class({
     
         
     // Old version of firefox and opera don't support click trigger for input files fields    
-    // Internet "Exploiter" do not allow trigger a form submit if the input file field was not clicked directly by the user
+    // Internet "Exploiter" do not allow trigger a form submit if the input file field was not clicked directly by the user    
     if (this.options.method != 'flash' && (Browser.firefox2 || Browser.firefox3 || Browser.opera || Browser.ie))
-    {      
-      // Get addFile attributes
-      var addfileposition = document.id(subcontainer_id+'_btnAddfile').getPosition();
-      var addfilesize     = document.id(subcontainer_id+'_btnAddfile').getSize();
-      
-      this.lastinput.setStyles({
-        top: addfileposition.y,
-        left: addfileposition.x - 1,
-        width: addfilesize.x + 2, // Extra space for cover button border
-        height: addfilesize.y,
-        opacity: 0.0001,    // Opera opacity ninja trick
-        '-moz-opacity': 0
-      });
-    
+    {					
+			this.moveInput(subcontainer);																              
     }
     else
-      this.lastinput.setStyle('visibility', 'hidden');
+      this.lastinput.setStyle('visibility', 'hidden');  
     
     
     // Create events
@@ -366,6 +354,33 @@ var MooUpload = new Class({
                     
     }.bind(this));
     
+  },
+  
+  moveInput: function(subcontainer) {
+		
+		var subcontainer_id = document.id(subcontainer).get('id');
+		 
+		// Get addFile attributes
+    var addfileposition = document.id(subcontainer_id+'_btnAddfile').getPosition();
+    var addfilesize     = document.id(subcontainer_id+'_btnAddfile').getSize();
+    
+    /*
+    this.lastinput.position({
+			relativeTo: subcontainer_id+'_btnAddfile',
+			position: 'bottomLeft'								
+		});
+		*/
+		
+		
+		this.lastinput.setStyles({    
+      top: addfileposition.y,
+      left: addfileposition.x - 1, 
+      width: addfilesize.x + 2, // Extra space for cover button border
+      height: addfilesize.y,
+      opacity: 0.0001,    			// Opera opacity ninja trick
+      '-moz-opacity': 0
+    });    
+          
   },
   
   upload: function(subcontainer) {
@@ -641,8 +656,7 @@ var MooUpload = new Class({
     }
     
     this.baseHtml(subcontainer);	
-        
-    
+            
     // Translate file type filter
     var filters = this.flashFilter(this.options.accept);
                      
@@ -687,7 +701,8 @@ var MooUpload = new Class({
                                                 
 		    }.bind(this),
         
-        select: function(files) {                                                
+        select: function(files) {        
+				alert(files[0]);                                        
           this.addFiles(files[0], subcontainer);	  
           
           this.progressIni(document.id(subcontainer_id+'_progresscont'));               
@@ -743,14 +758,19 @@ var MooUpload = new Class({
       }
     });
     
-    flashElement = this.flashobj.toElement();
-        
-    // Check flash load
+    
+    // toElement() method don't work in IE
+		/* 
+    var flashElement = this.flashobj.toElement();
+		        
+    // Check flash load    
     if (!flashElement.getParent() || flashElement.getStyle('display') == 'none')
     {
       subcontainer.set('html', this.options.texts.noflash);
       return false;
-    }        
+    } 
+    */
+		        
 	 			  
   },
   
@@ -1108,8 +1128,7 @@ var MooUpload = new Class({
             
     }).inject(subcontainer);
     
-    
-              
+		                  
     this.baseHtml(subcontainer);
     
     // Trigger for html file input
