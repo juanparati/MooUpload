@@ -127,6 +127,7 @@ var MooUpload = new Class({
   uploadspertime: 0,
   uploading: true,
   flashobj: null,
+  flashloaded: false,
 
 
   /*
@@ -646,7 +647,7 @@ var MooUpload = new Class({
     Specific method for flash
   */
   flash: function (subcontainer) {
-    var subcontainer_id = subcontainer.get('id');
+    var subcontainer_id = subcontainer.get('id');   
 
     // Check if Flash is supported
     if (!Browser.Plugins.Flash || Browser.Plugins.Flash.version < 9)
@@ -672,7 +673,13 @@ var MooUpload = new Class({
         left: btnposition.x
       }
     }).inject(subcontainer);
-
+                
+    
+		// Prevent IE cache bug
+		if (Browser.ie)
+			this.options.flash.movie += (this.options.flash.movie.contains('?') ? '&' : '?') + 'mooupload_movie=' + Date.now();
+		
+    
     // Deploy flash movie
     this.flashobj = new Swiff(this.options.flash.movie, {
       container: flashcontainer.get('id'),
@@ -685,7 +692,7 @@ var MooUpload = new Class({
       callBacks: {
 
         load: function() {
-
+					
           Swiff.remote(this.flashobj.toElement(), 'xInitialize', {
             multiple: this.options.multiple,
             url: this.options.action,
@@ -698,6 +705,8 @@ var MooUpload = new Class({
             data: this.cookieData(),
             verbose: true
           });
+          
+          this.flashloaded = true;                    					
 
         }.bind(this),
 
@@ -757,7 +766,7 @@ var MooUpload = new Class({
       }
     });
 
-
+							
     // toElement() method don't work in IE
     /*
     var flashElement = this.flashobj.toElement();
@@ -769,7 +778,6 @@ var MooUpload = new Class({
       return false;
     }
     */
-
 
   },
 
