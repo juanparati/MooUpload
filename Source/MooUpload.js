@@ -1077,10 +1077,12 @@ var MooUpload = new Class({
 
       styles: {
         display: 'none'
-      },
+      }
+    });
 
-      events: {
-        load: function() {
+    iframe.addEvent('load',
+
+      function() {
 
           var response = iframe.contentWindow.document.body.innerHTML;
 
@@ -1131,9 +1133,7 @@ var MooUpload = new Class({
           }
 
         }.bind(this)
-      }
-
-    }).inject(subcontainer);
+    ).inject(subcontainer);
 
 
     this.baseHtml(subcontainer);
