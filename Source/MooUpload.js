@@ -5,7 +5,7 @@ name: MooUpload
 
 description: Crossbrowser file uploader with HTML5 chunk upload support
 
-version: 0.98
+version: 0.99
 
 license: MIT-style license
 
@@ -65,8 +65,10 @@ Request.implement({
     }, this);
 
     this.fireEvent('request');
-    xhr.send(blob);
-    if (!this.options.async) this.onStateChange();
+    
+	xhr.send(blob);
+    
+	if (!this.options.async) this.onStateChange();
     if (this.options.timeout) this.timer = this.timeout.delay(this.options.timeout, this);
     return this;
    }
@@ -89,7 +91,7 @@ var MooUpload = new Class({
     multiple: true,
     autostart: false,
     listview: true,
-    blocksize: 512000,        // I don't recommend less of 101400 and not more of 502000
+    blocksize: 101400,        // I don't recommend you less of 101400 and not more of 502000
     maxuploadspertime: 2,
     minfilesize: 1,
     maxfilesize: 0,
@@ -118,6 +120,7 @@ var MooUpload = new Class({
     onFileUpload: function(fileindex, response){},
     onFileUploadError: function(fileindex, response){},
     onFinishUpload: function(){},
+	onLoad: function(){},
     onSelect: function(){},
     onSelectError: function(error, filename, filesize){}
   },
@@ -246,6 +249,8 @@ var MooUpload = new Class({
       }).inject(header);
 
     }
+	
+	this.fireEvent('onLoad');
 
   },
 
@@ -309,7 +314,6 @@ var MooUpload = new Class({
     this.lastinput = new Element('input', {
       id: subcontainer_id+'_tbxFile'+this.countContainers(subcontainer),
       name: subcontainer_id+'_tbxFile'+this.countContainers(subcontainer),
-      src: 'http://www.google.com',
       type: 'file',
       size: 1,
       styles: {
@@ -367,11 +371,10 @@ var MooUpload = new Class({
 
     /*
     this.lastinput.position({
-      relativeTo: subcontainer_id+'_btnAddfile',
+      relativeTo: document.id(subcontainer_id+'_btnAddfile'),
       position: 'bottomLeft'
     });
-    */
-
+	*/    
 
     this.lastinput.setStyles({
       top: addfileposition.y,
@@ -608,7 +611,7 @@ var MooUpload = new Class({
   // ------------------------- Specific methods for auto ---------------------
 
   /*
-  Function: flash
+  Function: auto
     Private method
 
     Specific method for flash
@@ -617,7 +620,7 @@ var MooUpload = new Class({
   auto: function(subcontainer) {
 
     // Check html5 support
-    if (window.File && window.FileList && window.Blob)
+    if (window.File && window.FileList && window.FileReader && window.Blob)
     {
       this.options.method = 'html5';
 
@@ -675,9 +678,9 @@ var MooUpload = new Class({
     }).inject(subcontainer);
                 
     
-		// Prevent IE cache bug
-		if (Browser.ie)
-			this.options.flash.movie += (this.options.flash.movie.contains('?') ? '&' : '?') + 'mooupload_movie=' + Date.now();
+	// Prevent IE cache bug
+	if (Browser.ie)
+		this.options.flash.movie += (this.options.flash.movie.contains('?') ? '&' : '?') + 'mooupload_movie=' + Date.now();
 		
     
     // Deploy flash movie
@@ -767,7 +770,7 @@ var MooUpload = new Class({
     });
 
 							
-    // toElement() method don't work in IE
+    // toElement() method doesn't work in IE
     /*
     var flashElement = this.flashobj.toElement();
 
@@ -889,7 +892,7 @@ var MooUpload = new Class({
   html5: function (subcontainer) {
 
     // Check html5 File API
-    if (!window.File && !window.FileList && !window.Blob)
+    if (!window.File || !window.FileList || !window.FileReader || !window.Blob)
     {
       subcontainer.set('html', this.options.texts.nohtml5);
       return false;
@@ -983,7 +986,7 @@ var MooUpload = new Class({
       },
       onSuccess: function(response)
       {
-        response = JSON.decode(response);
+        response = JSON.decode(response);			
 
         if (this.options.listview)
             var respcontainer = document.id(subcontainer.get('id')+'_file_'+(filenum + 1));
@@ -1023,7 +1026,7 @@ var MooUpload = new Class({
           }
         }
         else
-        {
+        {			
 
           if (this.options.listview)
           {

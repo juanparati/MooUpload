@@ -120,10 +120,15 @@ class Mooupload
 	    
 	  // Detect upload errors
 		if ($headers['Content-Length'] > $limit) 
-	    $response['error'] = UPLOAD_ERR_INI_SIZE;     
+	    $response['error'] = UPLOAD_ERR_INI_SIZE;
+			
+		// Firefox 4 sometimes sends a empty packet as last packet
+		/*	       
 	  else if ($headers['Content-Length'] == 0)
 	    $response['error'] = UPLOAD_ERR_NO_FILE;
-	           
+	  */	    	  
+		
+		           
 	  // Is resume?	  
 		$flag = (bool)$headers['X-File-Resume'] ? FILE_APPEND : 0;
 	  

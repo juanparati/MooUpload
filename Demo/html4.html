@@ -42,14 +42,13 @@ ul {
 <script type="text/javascript">
 
 window.addEvent('domready', function() {
-  
-	// Basic example using the best upload method (Autodetect the best method)	  
+	
+	// Autostart without listview
 	var myUpload = new MooUpload('filecontrol', {
 		action: 'upload.php',		// Server side upload script
-		method: 'auto',				// Automatic upload method (Choose the best)
-		onLoad: function() {			
-			document.id('filecontrol').grab(new Element('p', { html: '<strong>Best method detected:</strong> '+this.options.method }), 'bottom');
-		}
+		method: 'html4',				// Use only HTML4 method
+		listview: false,				// Disable listview
+		autostart: true					// Force upload autostart 
 	});
 	
 });
@@ -70,8 +69,10 @@ window.addEvent('domready', function() {
 </p>
 
 <p>
-<h2>1) Best upload method</h2>
-Basic example that autodetect the best upload method.
+<h2>3) HTML4 method without listview and autostart</h2>
+
+MooUpload allow you to disable or enable some features like listview (Yes! Listview works in HTML4), multiple selection (Only with HTML5 and Flash method) or autostart.   
+
 <div id="filecontrol" class="half"></div>
 </p>
 

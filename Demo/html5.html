@@ -42,15 +42,27 @@ ul {
 <script type="text/javascript">
 
 window.addEvent('domready', function() {
-  
-	// Basic example using the best upload method (Autodetect the best method)	  
-	var myUpload = new MooUpload('filecontrol', {
-		action: 'upload.php',		// Server side upload script
-		method: 'auto',				// Automatic upload method (Choose the best)
-		onLoad: function() {			
-			document.id('filecontrol').grab(new Element('p', { html: '<strong>Best method detected:</strong> '+this.options.method }), 'bottom');
+	
+	// Upload only with HTML5 using triggers and multiple selection
+	var myUpload = new MooUpload('filecontrol', {    
+		action: 'upload.php',		// Server side upload script    
+		method: 'html5',				// Use only HTML5 method
+		blocksize: 102400,			// Chunk size
+			onAddFiles: function() {
+				alert('Thank you for add file(s)');
+			},
+		onFinishUpload: function() {
+			var finishlist = '';
+			
+			for (var i = 0, f; f = this.filelist[i]; i++) {
+				
+				if (!f.error && f.uploaded)
+					finishlist += f.name + ' with '+f.size+" bytes has been uploaded\n"; 	
+			}    
+			
+			alert(finishlist);
 		}
-	});
+ 	}); 
 	
 });
 </script>
@@ -70,8 +82,8 @@ window.addEvent('domready', function() {
 </p>
 
 <p>
-<h2>1) Best upload method</h2>
-Basic example that autodetect the best upload method.
+<h2>2) HTML5 method using chunk uploading, triggers and multiple selection</h2>
+HTML5 method only works in these web browsers that have implemented the FileReader API.
 <div id="filecontrol" class="half"></div>
 </p>
 
