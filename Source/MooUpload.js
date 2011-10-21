@@ -209,45 +209,37 @@ var MooUpload = new Class({
     // Create file list container
     if (this.options.listview)
     {
-
-      var listview = new Element('div', {
-        id: subcontainer_id+'_listView',
-        'class': 'mooupload_listview'
-      }).inject(subcontainer);
+	  var listview = new Element('div.mooupload_listview', {
+		  id: subcontainer_id+'_listView'
+	  }).inject(subcontainer);
 
       var ulcontainer = new Element('ul').inject(listview);
 
-      var header = new Element('li', {
-        'class': 'header'
-      }).inject(ulcontainer);
+      var header = new Element('li.header').inject(ulcontainer).adopt(
 
-      new Element('div', {
-        'class': 'optionsel',
-        html: this.options.texts.sel
-      }).inject(header);
+	    new Element('div.optionsel', {
+    	  html: this.options.texts.sel
+      	}),
 
-      new Element('div', {
-        'class': 'filename',
-        html: this.options.texts.file
-      }).inject(header);
+      	new Element('div.filename', {
+          html: this.options.texts.file
+      	}),
 
-      /*
-      new Element('div', {
-        'class': 'filetype',
-        html: this.options.texts.filetype
-      }).inject(header);
-      */
+		/*
+		new Element('div.filetype', {
+		  html: this.options.texts.filetype
+		}),
+		*/
 
-      new Element('div', {
-        'class': 'filesize',
-        html: this.options.texts.filesize
-      }).inject(header);
+		new Element('div.filesize', {
+		  html: this.options.texts.filesize
+		}),
 
-      new Element('div', {
-        'class': 'result',
-        html: this.options.texts.status
-      }).inject(header);
-
+		new Element('div.result', {
+		  html: this.options.texts.status
+		})
+		
+	  );
     }
 	
 	this.fireEvent('onLoad');
