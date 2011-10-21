@@ -629,13 +629,9 @@ var MooUpload = new Class({
         this.options.method = 'auto';
     }
 
-    // Check flash support
-    if (this.options.method == 'auto' && Browser.Plugins.Flash && Browser.Plugins.Flash.version >= 9)
-      this.options.method = 'flash';
-
-    // Default html4
-    if (this.options.method == 'auto')
-      this.options.method = 'html4';
+	// Default to html4 if no Flash support
+	if (this.options.method == 'auto') 
+	  this.options.method = Browser.Plugins.Flash && Browser.Plugins.Flash.version >= 9 ? 'flash' : 'html4';
 
     this[this.options.method](subcontainer);
 
