@@ -100,11 +100,7 @@ class Mooupload
 		if (!file_exists($destpath))
 			throw new Exception('Path do not exist!');
 					
-		$response = array();
-  
-	  // Read headers
-		$headers 	= getallheaders();
-	  $protocol = $_SERVER['SERVER_PROTOCOL'];
+		  	  	  
 	  
 	  $max_upload 	= self::_convert_size(ini_get('upload_max_filesize'));
 	  $max_post 		= self::_convert_size(ini_get('post_max_size'));
@@ -112,14 +108,18 @@ class Mooupload
 	  
 	  $limit = min($max_upload, $max_post, $memory_limit);
 	      
-	  $response['id']    	= $headers['X-File-Id'];
+	  // Read headers
+	  $response = array();
+		$headers 	= self::_read_headers();
+		
+		$response['id']    	= $headers['X-File-Id'];
 	  $response['name']  	= basename($headers['X-File-Name']); 	// Basename for security issues
 	  $response['size']  	= $headers['Content-Length'];
 	  $response['error'] 	= UPLOAD_ERR_OK; 
 	  $response['finish'] = FALSE;
 	    
 	  // Detect upload errors
-		if ($headers['Content-Length'] > $limit) 
+		if ($response['size'] > $limit) 
 	    $response['error'] = UPLOAD_ERR_INI_SIZE;
 			
 		// Firefox 4 sometimes sends a empty packet as last packet
@@ -144,7 +144,12 @@ class Mooupload
 	  else
 	  {
 	    if (filesize($destpath.$filename) == $headers['X-File-Size'])
+	    {
 	      $response['finish'] = TRUE;
+	      
+	      /* If uploaded file is finished, maybe you are interested in saving, registering or moving the file */
+				// my_save_file($destpath.$filename, $response['name']);
+	    }
 	  } 
 	    
 	  
@@ -216,7 +221,36 @@ class Mooupload
 			$path .= DIRECTORY_SEPARATOR;
 		
 		return $path; 
-	}	 	 	 	
+	}	
+	
+	/**
+	 *
+	 * Read and normalize headers
+	 * 	 
+	 * @return	array	 
+	 *
+	 */
+	public static function _read_headers()
+	{
+	
+		// GetAllHeaders doesn't work with PHP-CGI
+		if (function_exists('getallheaders')) 
+		{
+			$headers = getallheaders();
+		}
+		else 
+		{
+			$headers = array();
+			$headers['Content-Length'] 	= $_SERVER['CONTENT_LENGTH'];
+			$headers['X-File-Id'] 			= $_SERVER['HTTP_X_FILE_ID'];
+			$headers['X-File-Name'] 		= $_SERVER['HTTP_X_FILE_NAME'];			
+			$headers['X-File-Resume'] 	= $_SERVER['HTTP_X_FILE_RESUME'];
+			$headers['X-File-Size'] 		= $_SERVER['HTTP_X_FILE_SIZE'];
+		}
+		
+		return $headers;
+		
+	}	 	 	
 	
 }
 
