@@ -209,45 +209,37 @@ var MooUpload = new Class({
     // Create file list container
     if (this.options.listview)
     {
-
-      var listview = new Element('div', {
-        id: subcontainer_id+'_listView',
-        'class': 'mooupload_listview'
-      }).inject(subcontainer);
+	  var listview = new Element('div.mooupload_listview', {
+		  id: subcontainer_id+'_listView'
+	  }).inject(subcontainer);
 
       var ulcontainer = new Element('ul').inject(listview);
 
-      var header = new Element('li', {
-        'class': 'header'
-      }).inject(ulcontainer);
+      var header = new Element('li.header').inject(ulcontainer).adopt(
 
-      new Element('div', {
-        'class': 'optionsel',
-        html: this.options.texts.sel
-      }).inject(header);
+	    new Element('div.optionsel', {
+    	  html: this.options.texts.sel
+      	}),
 
-      new Element('div', {
-        'class': 'filename',
-        html: this.options.texts.file
-      }).inject(header);
+      	new Element('div.filename', {
+          html: this.options.texts.file
+      	}),
 
-      /*
-      new Element('div', {
-        'class': 'filetype',
-        html: this.options.texts.filetype
-      }).inject(header);
-      */
+		/*
+		new Element('div.filetype', {
+		  html: this.options.texts.filetype
+		}),
+		*/
 
-      new Element('div', {
-        'class': 'filesize',
-        html: this.options.texts.filesize
-      }).inject(header);
+		new Element('div.filesize', {
+		  html: this.options.texts.filesize
+		}),
 
-      new Element('div', {
-        'class': 'result',
-        html: this.options.texts.status
-      }).inject(header);
-
+		new Element('div.result', {
+		  html: this.options.texts.status
+		})
+		
+	  );
     }
 	
 	this.fireEvent('onLoad');
@@ -363,24 +355,22 @@ var MooUpload = new Class({
 
   moveInput: function(subcontainer) {
 
-    var subcontainer_id = document.id(subcontainer).get('id');
-
     // Get addFile attributes
-    var addfileposition = document.id(subcontainer_id+'_btnAddfile').getPosition();
-    var addfilesize     = document.id(subcontainer_id+'_btnAddfile').getSize();
-
+	var btn = subcontainer.getElementById(subcontainer.get('id')+'_btnAddfile'),
+		btncoords = btn.getCoordinates(btn.getOffsetParent());
+		
     /*
     this.lastinput.position({
       relativeTo: document.id(subcontainer_id+'_btnAddfile'),
       position: 'bottomLeft'
     });
-	*/    
-
+	*/  
+	
     this.lastinput.setStyles({
-      top: addfileposition.y,
-      left: addfileposition.x - 1,
-      width: addfilesize.x + 2, // Extra space for cover button border
-      height: addfilesize.y,
+      top: btncoords.top,
+      left: btncoords.left - 1,
+      width: btncoords.width + 2, // Extra space for cover button border
+      height: btncoords.height,
       opacity: 0.0001,          // Opera opacity ninja trick
       '-moz-opacity': 0
     });
@@ -629,13 +619,9 @@ var MooUpload = new Class({
         this.options.method = 'auto';
     }
 
-    // Check flash support
-    if (this.options.method == 'auto' && Browser.Plugins.Flash && Browser.Plugins.Flash.version >= 9)
-      this.options.method = 'flash';
-
-    // Default html4
-    if (this.options.method == 'auto')
-      this.options.method = 'html4';
+	// Default to html4 if no Flash support
+	if (this.options.method == 'auto') 
+	  this.options.method = Browser.Plugins.Flash && Browser.Plugins.Flash.version >= 9 ? 'flash' : 'html4';
 
     this[this.options.method](subcontainer);
 
@@ -664,12 +650,13 @@ var MooUpload = new Class({
     // Translate file type filter
     var filters = this.flashFilter(this.options.accept);
 
-    var btnsize = document.id(subcontainer_id+'_btnAddfile').getSize();
-    var btnposition = document.id(subcontainer_id+'_btnAddfile').getPosition();
-
+    var btn = subcontainer.getElementById(subcontainer_id+'_btnAddfile'),
+		btnposition = btn.getPosition(btn.getOffsetParent()),
+		btnsize = btn.getSize();
+    
     // Create container for flash
     var flashcontainer = new Element('div', {
-      id: subcontainer.get('id')+'_flash',
+      id: subcontainer_id+'_flash',
       styles: {
         position: 'absolute',
         top: btnposition.y,
