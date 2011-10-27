@@ -650,9 +650,9 @@ var MooUpload = new Class({
     // Translate file type filter
     var filters = this.flashFilter(this.options.accept);
 
-    var btn = subcontainer.getElementById(subcontainer_id+'_btnAddfile'),
-		btnposition = btn.getPosition(btn.getOffsetParent()),
-		btnsize = btn.getSize();
+    var btn = subcontainer.getElementById(subcontainer_id+'_btnAddfile');
+	var	btnposition = btn.getPosition(btn.getOffsetParent());
+	var	btnsize = btn.getSize();
     
     // Create container for flash
     var flashcontainer = new Element('div', {
@@ -800,55 +800,25 @@ var MooUpload = new Class({
 
   flashFilter: function(filters)
   {
-    filters = filters.split(',');
+    var filtertypes = {}, assocfilters = {};
+	var extensions =  {
+      	'image': '*.jpg; *.jpeg; *.gif; *.png; *.bmp;', 
+		'video': '*.avi; *.mpg; *.mpeg; *.flv; *.ogv; *.webm; *.mov; *.wm;',
+    	'text' : '*.txt; *.rtf; *.doc; *.docx; *.odt; *.sxw;',
+		'*'    : '*.*;'}
 
-    var filtertypes = new Array();
-    var assocfilters = new Object();
+	filters.split(',').each(function(val) {
+	  	val = val.split('/').invoke('trim');
+		filtertypes[val[0]] = (filtertypes[val[0]] ? filtertypes[val[0]] + ' ' : '') + '*.'+val[1]+';';
+	});
 
-    filters.each(function(item, index) {
-
-      var keyvalue = item.split('/');
-
-      if (filtertypes[keyvalue[0]] != undefined)
-        filtertypes[keyvalue[0]] += ' *.'+keyvalue[1]+';';
-      else
-        filtertypes[keyvalue[0]] = '*.'+keyvalue[1]+';';
-
-    });
-
-
-    // Filtertypes is not an associative array is an object!
-    // (See: http://www.hunlock.com/blogs/Mastering_Javascript_Arrays#quickIDX9)
-    Object.each(filtertypes, function(item, index, obj) {
-      var extension = item;
-      var newindex = index.capitalize();
-
-      if (item == '*.*;')
-      {
-        switch (index)
-        {
-          case 'image':
-            extension = '*.jpg; *.jpeg; *.gif; *.png; *.bmp;';
-            break;
-          case 'video':
-            extension = '*.avi; *.mpg; *.mpeg; *.flv; *.ogv; *.webm; *.mov; *.wm;';
-            break;
-          case 'text':
-            extension = '*.txt; *.rtf; *.doc; *.docx; *.odt; *.sxw;';
-            break;
-          case '*':
-            extension = '*.*;'
-            newindex = 'All Files';
-            break;
-        }
-      }
-
-      assocfilters[newindex + ' ('+extension+')'] = extension;
-
-    });
-
-    return assocfilters;
-
+	Object.each(filtertypes, function(val, key){
+		var newindex = key == '*' ? 'All Files' : key.capitalize(); 
+		if (val == '*.*;') val = extensions[key];
+		assocfilters[newindex+' ('+val+')'] = val;
+	});
+	
+	return assocfilters;
   },
 
   // appendCookieData based in Swiff.Uploader.js
