@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8" />
-<title>HTML4 uploader</title>
+<title>HTML5 uploader</title>
 
 <link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/2.9.0/build/base/base-min.css">
 <link rel="stylesheet" type="text/css" media="all" href="css/style.css" />
@@ -46,9 +46,11 @@ window.addEvent('domready', function() {
 	// Autostart without listview
 	var myUpload = new MooUpload('filecontrol', {
 		action: 'upload.php',		// Server side upload script
-		method: 'html4',				// Use only HTML4 method				
-		listview: false,				// Disable listview
-		autostart: true					// Force upload autostart 
+		method: 'html5',			// Use only HTML4 method				
+		maxfiles: 3,				// You can select only 3 files
+		onLoad: function() {			
+			document.id('filecontrol').grab(new Element('p', { html: 'You can upload only '+this.options.maxfiles +' files'}), 'bottom');
+		}
 	});
 	
 });
@@ -72,9 +74,9 @@ window.addEvent('domready', function() {
 </p>
 
 <p>
-<h2>3) HTML4 method without listview and autostart</h2>
+<h2>3) HTML5 method with maximum selection limit</h2>
 
-MooUpload allow you to disable or enable some features like listview (Yes! Listview works in HTML4), multiple selection (Only with HTML5 and Flash method) or autostart.   
+MooUpload allow you to set a maximum file selection limit for HTML4, HTML5 and Flash methods.
 
 <div id="filecontrol" class="half"></div>
 </p>

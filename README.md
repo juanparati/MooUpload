@@ -17,6 +17,7 @@ Features
 + Multilanguage
 + External triggers (onSelect, OnFileUpload, onFinishUpload...)
 + Minimun and maximun file size detection
++ Maximum files selection
 + Asynchronous file upload (only with HTML5 and Flash)  
 + Selector file type filter (Works only with Flash and partially with HTML5)
 ...
@@ -40,7 +41,5 @@ Dependencies
 How to Use
 ----------
 
-See demo
+[See demo](http://www.livespanske.com/labs/MooUpload)
   
-
- 

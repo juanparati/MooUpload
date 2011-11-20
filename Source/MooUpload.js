@@ -5,7 +5,7 @@ name: MooUpload
 
 description: Crossbrowser file uploader with HTML5 chunk upload support
 
-version: 0.99
+version: 1.0
 
 license: MIT-style license
 
@@ -95,6 +95,8 @@ var MooUpload = new Class({
     maxuploadspertime: 2,
     minfilesize: 1,
     maxfilesize: 0,
+	maxfiles: 0,
+	verbose: true,
 
     flash: {
       movie: 'Moo.Uploader.swf'
@@ -104,9 +106,10 @@ var MooUpload = new Class({
       error      : 'Error',
       file       : 'File',
       filesize   : 'Filesize',
-      filetype   : 'Filetype',
+      filetype   : 'Filetype',	 
       nohtml5    : 'Not support HTML5 file upload!',
       noflash    : 'Please install Flash 8.5 or highter version (Have you disabled FlashBlock or AdBlock?)',
+	  maxselect  : 'You can only select a maximum of {maxfiles} files',
       sel        : 'Sel.',
       selectfile : 'Add files',
       status     : 'Status',
@@ -252,6 +255,18 @@ var MooUpload = new Class({
 
     document.id(subcontainer_id+'_btnAddfile').addEvent('click', function(e) {
       new Event(e).stop();
+	  
+	  // Check out select max files
+	  if (this.options.maxfiles && this.countStats().checked >= this.options.maxfiles)
+	  {
+		  this.fireEvent('onSelectError', ['maxfiles', this.filelist[this.filelist.length - 1].name, this.filelist[this.filelist.length - 1].size]);
+		  
+		  if (this.options.texts.maxselect.length > 0)
+		  {			
+			alert(this.options.texts.maxselect.substitute(this.options));			  			 		
+			return false;
+		  }
+	  }
 
       // Click trigger for input[type=file] only works in FF 4.x, IE and Chrome
       this.lastinput.click();
@@ -263,28 +278,21 @@ var MooUpload = new Class({
 
   newInput: function(subcontainer)
   {
-
+	
     var subcontainer_id = document.id(subcontainer).get('id');
     var inputsnum = this.countContainers(subcontainer);
     var formcontainer = subcontainer;
 
     // Hide old input
-    if (inputsnum > 0)
-    {
-      document.id(subcontainer_id+'_tbxFile'+(inputsnum - 1)).setStyles({
-        top: 0,
-        left: 0,
-        styles: {
-          display: 'none'
-        }
-      });
-    }
-
+    if (inputsnum > 0)				
+		document.id(subcontainer_id+'_tbxFile'+(inputsnum - 1)).setStyle('display', 'none');  		
+  
+		
     if (this.options.method == 'html4')
     {
       formcontainer = new Element('form', {
-        id: subcontainer_id+'_tbxFile'+this.countContainers(subcontainer),
-        name: subcontainer_id+'_frmFile'+this.countContainers(subcontainer),
+        id: subcontainer_id+'_frmFile' + inputsnum,
+        name: subcontainer_id+'_frmFile' + inputsnum,
         enctype: 'multipart/form-data',
         encoding: 'multipart/form-data',  // I hate IE
         method: 'post',
@@ -304,8 +312,8 @@ var MooUpload = new Class({
 
     // Input File
     this.lastinput = new Element('input', {
-      id: subcontainer_id+'_tbxFile'+this.countContainers(subcontainer),
-      name: subcontainer_id+'_tbxFile'+this.countContainers(subcontainer),
+      id: subcontainer_id+'_tbxFile' + inputsnum,
+      name: subcontainer_id+'_tbxFile' + inputsnum,
       type: 'file',
       size: 1,
       styles: {
@@ -328,8 +336,7 @@ var MooUpload = new Class({
     }
     else
       this.lastinput.setStyle('visibility', 'hidden');
-
-
+		 
     // Create events
     this.lastinput.addEvent('change', function(e) {
 
@@ -350,14 +357,18 @@ var MooUpload = new Class({
       }
 
     }.bind(this));
+	
+	// Hide last input if max selected files 
+	if (this.options.maxfiles && this.countStats().checked >= this.options.maxfiles)	
+		this.lastinput.setStyle('display', 'none');	
 
   },
 
   moveInput: function(subcontainer) {
 
     // Get addFile attributes
-	var btn = subcontainer.getElementById(subcontainer.get('id')+'_btnAddfile'),
-		btncoords = btn.getCoordinates(btn.getOffsetParent());
+	var btn = subcontainer.getElementById(subcontainer.get('id')+'_btnAddfile');
+	var	btncoords = btn.getCoordinates(btn.getOffsetParent());
 		
     /*
     this.lastinput.position({
@@ -377,9 +388,9 @@ var MooUpload = new Class({
 
   },
 
-  upload: function(subcontainer) {
-
-    this.uploading = false;
+  upload: function(subcontainer) {  
+	  
+	this.uploading = false;
 
     this.fireEvent('onBeforeUpload');
 
@@ -403,22 +414,12 @@ var MooUpload = new Class({
       progressbar.setStyle('display', 'block');
 
     var progress = progressbar.getChildren('div');
-    var uploaded = 1;
-    var checked = 1;
-
-    for (var i = 0, f; f = this.filelist[i]; i++)
-    {
-      if (f.checked)
-      {
-        checked++;
-
-        if (f.uploaded)
-          uploaded++;
-      }
-
-    }
-
-    var percent = (uploaded / checked) * 100;
+	var stats = this.countStats();	
+    
+	stats.uploaded++;
+    stats.checked++;
+   
+    var percent = (stats.uploaded / stats.checked) * 100;
 
     progress.set('tween', {duration: 'short'});
     progress.tween('width', percent+'%');
@@ -458,8 +459,9 @@ var MooUpload = new Class({
     Add new files
   */
   addFiles: function(files, subcontainer) {
-
-    var subcontainer_id = subcontainer.get('id');
+	  
+	var subcontainer_id = subcontainer.get('id');
+	var maxfileserror = false;
 
     if (this.options.listview && subcontainer !== undefined)
       var listcontainer = document.id(subcontainer.get('id')+'_listView').getElement('ul');
@@ -467,8 +469,18 @@ var MooUpload = new Class({
     for (var i = 0, f; f = files[i]; i++)
     {
 
-      var fname = f.name || f.fileName;
-      var fsize = f.size || f.fileSize;
+      var fname  = f.name || f.fileName;
+      var fsize  = f.size || f.fileSize;
+	  var fchecked = true
+	  
+	  // Check out select max files
+	  if (this.options.maxfiles && this.countStats().checked >= this.options.maxfiles)
+	  {		  
+		  this.fireEvent('onSelectError', ['maxfiles', fname, fsize]);			  			 			
+		  maxfileserror = true;
+		  
+		  fchecked = false;
+	  }	  
 
       if (fsize != undefined)
       {
@@ -476,20 +488,20 @@ var MooUpload = new Class({
         if (fsize < this.options.minfilesize)
         {
           this.fireEvent('onSelectError', ['minfilesize', fname, fsize]);
-          return false;
+          fchecked = false;
         }
 
         if (this.options.maxfilesize > 0 && fsize > this.options.maxfilesize)
         {
           this.fireEvent('onSelectError', ['maxfilesize', fname, fsize]);
-          return false;
+          fchecked = false;
         }
 
       }
 
       this.filelist[this.filelist.length]  = {
                         id: String.uniqueID(),
-                        checked: true,
+                        checked: fchecked,
                         name: fname,
                         type: f.type || f.extension,
                         size: fsize,
@@ -499,10 +511,13 @@ var MooUpload = new Class({
                       };
 
 
-      if (this.options.listview && subcontainer !== undefined)
+      if (this.options.listview && subcontainer !== undefined && fchecked)
         this.addFileList(subcontainer, listcontainer, this.filelist[this.filelist.length - 1]);
 
     }
+	
+	if (maxfileserror && this.options.texts.maxselect.length > 0)
+			alert(this.options.texts.maxselect.substitute(this.options));
 
     //console.log(this.filelist);
 
@@ -540,15 +555,25 @@ var MooUpload = new Class({
 
     optiondelete.addEvent('click', function(e) {
       e.stop();
-
-      //this.filelist.splice(fileindex, 1);
+    
       this.filelist[fileindex].checked = false;
 
       optiondelete.removeEvents('click');
       optiondelete.getParent('li').destroy();
 
       this[this.options.method+'Delete'](fileindex);
-
+	  
+	  // Check max selected files
+	  var inputsnum = this.countContainers(maincontainer);
+	  	  
+	  if (inputsnum > 0)
+	  {			
+		document.id(maincontainer_id+'_tbxFile' + (inputsnum - 1)).setStyles({       			
+			visibility: 'hidden',
+			display: 'block'
+		});
+	  }
+	  
       this.fireEvent('onFileDelete', [fileindex]);
     }.bind(this));
 
@@ -596,6 +621,31 @@ var MooUpload = new Class({
 
     return containers.length;
   },
+  
+  countStats: function()
+  {
+	var stats = {
+					checked: 0,
+					uploaded: 0,
+					uploading: 0,
+					error: 0
+				};
+	
+	for (var i = 0, f; f = this.filelist[i]; i++)
+    {
+      if (f.checked)
+      {
+        stats.checked++;
+		
+		stats.uploaded += f.uploaded ? 1 : 0;
+		stats.uploading += f.uploading ? 1: 0;
+		stats.error += f.error ? 1 : 0;        
+      }
+
+    }
+	
+	return stats;	
+  },
 
 
   // ------------------------- Specific methods for auto ---------------------
@@ -604,7 +654,7 @@ var MooUpload = new Class({
   Function: auto
     Private method
 
-    Specific method for flash
+    Specific method for auto
   */
 
   auto: function(subcontainer) {
@@ -689,29 +739,26 @@ var MooUpload = new Class({
             method: 'post',
             queued: this.options.maxuploadspertime,
             fileSizeMin: this.options.fileminsize,
-            fileSizeMax: this.options.filemaxsize,
+            fileSizeMax: this.options.filemaxsize ? this.options.filemaxsize : null,
+			maxFiles: this.options.maxfiles,
             typeFilter: filters,
             mergeData: true,
             data: this.cookieData(),
-            verbose: true
+            verbose: this.options.verbose
           });
           
           this.flashloaded = true;                    					
 
-        }.bind(this),
+        }.bind(this),			
 
-        select: function(files) {
-          this.addFiles(files[0], subcontainer);
-
-          this.progressIni(document.id(subcontainer_id+'_progresscont'));
+        select: function(files) {													
+			this.addFiles(files[0], subcontainer);			
+			this.progressIni(document.id(subcontainer_id+'_progresscont'));
+			
         }.bind(this),
 
         complete: function(resume) {
           this.uploading = false;
-        }.bind(this),
-
-        fileOpen: function(file) {
-
         }.bind(this),
 
         fileProgress: function (file) {
@@ -725,7 +772,7 @@ var MooUpload = new Class({
 
         }.bind(this),
 
-        fileComplete: function(file) {
+        fileComplete: function(file) {			
 
           this.filelist[file[0].id - 1].uploaded = true;
 
@@ -751,7 +798,17 @@ var MooUpload = new Class({
 
           this.fireEvent('onFileUpload', [file[0].id, response]);
 
-        }.bind(this)
+        }.bind(this),
+		
+		maxFilesError: function() {
+			
+			this.fireEvent('onSelectError', ['maxfiles', this.filelist[this.filelist.length - 1].name, this.filelist[this.filelist.length - 1].size]);
+			
+			if (this.options.texts.maxselect.length > 0)
+				alert(this.options.texts.maxselect.substitute(this.options));			  			 
+			
+			
+		}.bind(this)
 
       }
     });
@@ -801,11 +858,12 @@ var MooUpload = new Class({
   flashFilter: function(filters)
   {
     var filtertypes = {}, assocfilters = {};
-	var extensions =  {
+	var extensions = {
       	'image': '*.jpg; *.jpeg; *.gif; *.png; *.bmp;', 
 		'video': '*.avi; *.mpg; *.mpeg; *.flv; *.ogv; *.webm; *.mov; *.wm;',
     	'text' : '*.txt; *.rtf; *.doc; *.docx; *.odt; *.sxw;',
-		'*'    : '*.*;'}
+		'*'    : '*.*;'
+					 };
 
 	filters.split(',').each(function(val) {
 	  	val = val.split('/').invoke('trim');
@@ -1040,9 +1098,7 @@ var MooUpload = new Class({
       }
     });
 
-    iframe.addEvent('load',
-
-      function() {
+    iframe.addEvent('load', function() {
 
           var response = iframe.contentWindow.document.body.innerHTML;
 
@@ -1056,8 +1112,7 @@ var MooUpload = new Class({
 
             if (this.options.listview)
               var respcontainer = document.id(subcontainer_id+'_file_'+(response.key + 1));
-
-            //console.log(respcontainer);
+            
             if (response.error > 0)
             {
               if (this.options.listview)
@@ -1113,7 +1168,7 @@ var MooUpload = new Class({
 
       this.getForms(subcontainer).each(function(el) {
 
-        var file = this.filelist[filenum];
+        var file = this.filelist[filenum];		
 
         if (file != undefined && !this.uploading)
         {
@@ -1125,7 +1180,7 @@ var MooUpload = new Class({
           }
         }
 
-        filenum++;
+        filenum++;		
 
       }.bind(this));
 

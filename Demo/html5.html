@@ -46,10 +46,10 @@ window.addEvent('domready', function() {
 	// Upload only with HTML5 using triggers and multiple selection
 	var myUpload = new MooUpload('filecontrol', {    
 		action: 'upload.php',		// Server side upload script    
-		method: 'html5',				// Use only HTML5 method
+		method: 'html5',			// Use only HTML5 method		
 		blocksize: 102400,			// Chunk size
 			onAddFiles: function() {
-				alert('Thank you for add file(s)');
+				alert('Thank you for add '+this.countStats().checked+' file(s)');
 			},
 		onFinishUpload: function() {
 			var finishlist = '';
@@ -78,6 +78,9 @@ window.addEvent('domready', function() {
 		<li><a href="html5.html">HTML5 method using chunk uploading, triggers and multiple selection</a></li>
 		<li><a href="html4.html">HTML4 method without listview and autostart</a></li>
 		<li><a href="flash.html">Flash method with single selection and selector filter</a></li>
+		<li><a href="html5_limit.html">HTML5 method with maximum selection limit</a></li>
+		<li><a href="html4_full.html">HTML4 method with default options</a></li>
+		<li><a href="flash_size.html">Flash method with minimum and maximum file size selection</a></li>
 	</ol>
 </p>
 
