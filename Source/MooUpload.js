@@ -96,7 +96,7 @@ var MooUpload = new Class({
     minfilesize: 1,
     maxfilesize: 0,
 	maxfiles: 0,
-	verbose: true,
+	verbose: false,
 
     flash: {
       movie: 'Moo.Uploader.swf'
