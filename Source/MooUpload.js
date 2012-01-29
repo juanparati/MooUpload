@@ -5,7 +5,7 @@ name: MooUpload
 
 description: Crossbrowser file uploader with HTML5 chunk upload support
 
-version: 1.0
+version: 1.1
 
 license: MIT-style license
 
@@ -331,12 +331,12 @@ var MooUpload = new Class({
     // Old version of firefox and opera don't support click trigger for input files fields
     // Internet "Exploiter" do not allow trigger a form submit if the input file field was not clicked directly by the user
     if (this.options.method != 'flash' && (Browser.firefox2 || Browser.firefox3 || Browser.opera || Browser.ie))
-    {
+    { 
       this.moveInput(subcontainer);
     }
     else
       this.lastinput.setStyle('visibility', 'hidden');
-		 
+			  
     // Create events
     this.lastinput.addEvent('change', function(e) {
 

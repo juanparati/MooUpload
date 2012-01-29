@@ -35,7 +35,7 @@ ul {
 }
 </style>
 
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.0/mootools-yui-compressed.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/mootools/1.4.2/mootools-yui-compressed.js"></script>
 
 <script type="text/javascript" src="../Source/MooUpload.js"></script>
 
@@ -47,7 +47,7 @@ window.addEvent('domready', function() {
 	var myUpload = new MooUpload('filecontrol', {    
 		action: 'upload.php',	// Server side upload script    
 		method: 'flash',		// Use only Flash method
-		multiple: false,		// Force to single selection 		
+		multiple: false,		// Force to single selection 			
 		accept: 'image/*'		// Accept only images (Only works with Flash and partially with HTML5)    		 		                       
 	});
 	
