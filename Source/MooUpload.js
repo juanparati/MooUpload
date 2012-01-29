@@ -122,7 +122,7 @@ var MooUpload = new Class({
     onFileDelete: function(fileindex){},
     onFileUpload: function(fileindex, response){},
     onFileUploadError: function(fileindex, response){},
-    onFinishUpload: function(){},
+	onFinishUpload: function(){},
 	onLoad: function(){},
     onSelect: function(){},
     onSelectError: function(error, filename, filesize){}
@@ -774,8 +774,8 @@ var MooUpload = new Class({
 
         fileComplete: function(file) {			
 
-          this.filelist[file[0].id - 1].uploaded = true;
-
+          this.filelist[file[0].id - 1].uploaded = true;		
+		  
           if (this.options.listview)
           {
 
@@ -792,11 +792,10 @@ var MooUpload = new Class({
               respcontainer.set('html', this.options.texts.uploaded);
             }
           }
-
-
-          this.progressStep(document.id(subcontainer_id+'_progresscont'));
-
-          this.fireEvent('onFileUpload', [file[0].id, response]);
+ 
+          this.progressStep(document.id(subcontainer_id+'_progresscont'));		  		 
+ 
+          this.fireEvent('onFileUpload', [file[0].id, JSON.decode(file[0].response.text)]);
 
         }.bind(this),
 		
