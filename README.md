@@ -32,7 +32,7 @@ Screenshots
 Dependencies
 ------------
 
-+ Mootools 1.4.2
++ Mootools 1.4.3
 	+ Elements.Event
 	+ Fx.Elements
 	+ Fx.Tween

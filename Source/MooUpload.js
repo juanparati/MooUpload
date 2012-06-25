@@ -254,7 +254,7 @@ var MooUpload = new Class({
     var subcontainer_id = subcontainer.get('id');
 
     document.id(subcontainer_id+'_btnAddfile').addEvent('click', function(e) {
-      new Event(e).stop();
+      e.stop();
 	  
 	  // Check out select max files
 	  if (this.options.maxfiles && this.countStats().checked >= this.options.maxfiles)
@@ -340,7 +340,7 @@ var MooUpload = new Class({
     // Create events
     this.lastinput.addEvent('change', function(e) {
 
-      new Event(e).stop();
+      e.stop();
 
       if (this.options.method == 'html4')
       {
