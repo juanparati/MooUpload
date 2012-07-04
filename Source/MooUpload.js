@@ -120,10 +120,12 @@ var MooUpload = new Class({
     onAddFiles: function(){},
     onBeforeUpload: function(){},
     onFileDelete: function(fileindex){},
+    onFileProgress: function(fileindex, percent){},
     onFileUpload: function(fileindex, response){},
     onFileUploadError: function(fileindex, response){},
-	onFinishUpload: function(){},
-	onLoad: function(){},
+    onFinishUpload: function(){},
+    onLoad: function(){},
+    onProgress: function(percent, stats){},
     onSelect: function(){},
     onSelectError: function(error, filename, filesize){}
   },
@@ -431,8 +433,12 @@ var MooUpload = new Class({
       this.uploading = false;
       progress.removeClass('mooupload_on');
       progress.addClass('mooupload_off');
-
+      this.fireEvent('onProgress', [100, stats]);
       this.fireEvent('onFinishUpload');
+    } 
+    else 
+    {
+      this.fireEvent('onProgress', [percent, stats]);
     }
 
   },
@@ -763,6 +769,8 @@ var MooUpload = new Class({
 
         fileProgress: function (file) {
 
+          this.fireEvent('onFileProgress', [file[0].id, file[0].progress.percentLoaded]);
+        	
           if (this.options.listview)
           {
             var respcontainer = document.id(subcontainer_id+'_file_' + file[0].id);
@@ -776,6 +784,8 @@ var MooUpload = new Class({
 
           this.filelist[file[0].id - 1].uploaded = true;		
 		  
+          this.fireEvent('onFileProgress', [file[0].id, 100]);
+          
           if (this.options.listview)
           {
 
@@ -1010,10 +1020,11 @@ var MooUpload = new Class({
 
           if (total < file.size)
           {
-
+            var percent = (total / file.size) * 100;
+        	this.fireEvent('onFileProgress', [filenum, percent]);
+        	  
             if (this.options.listview)
             {
-              var percent = (total / file.size) * 100;
               respcontainer.set('html', percent.ceil()+'%');
             }
 
@@ -1021,6 +1032,8 @@ var MooUpload = new Class({
           }
           else
           {
+        	this.fireEvent('onFileProgress', [filenum, 100]);
+        	
             if (this.options.listview)
             {
               respcontainer.addClass('mooupload_noerror');
