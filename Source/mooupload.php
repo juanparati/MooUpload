@@ -36,12 +36,13 @@ class Mooupload
 	 *
 	 * Upload a file using HTML4 or Flash method
 	 * 
-	 * @param		string	Directory destination path 	 	 	 	 
+	 * @param		string	Directory destination path 	 	 
+	 * @param		string	File prefix (Useful for avoid file overwriting)	 	 	 
 	 * @param		boolean	Return response to the script	 
 	 * @return	array		Response
 	 * 	 	  	 
 	 */
-	public static function HTML4_upload($destpath, $send_response = TRUE)
+	public static function HTML4_upload($destpath, $file_prefix = '', $send_response = TRUE)
 	{
 	
 		// Normalize path
@@ -65,7 +66,7 @@ class Mooupload
 	    
 	    if ($response['error'] == 0)
 	    {
-	      if (move_uploaded_file($file['tmp_name'], $destpath.$file['name']) === FALSE)      
+	      if (move_uploaded_file($file['tmp_name'], $destpath.$file_prefix.$file['name']) === FALSE)      
 	        $response['error'] = UPLOAD_ERR_NO_TMP_DIR;
 	      else
 	        $response['finish'] = TRUE;
@@ -90,7 +91,7 @@ class Mooupload
 	 * @return	array		Response
 	 * 	 	  	 
 	 */
-	public static function HTML5_upload($destpath, $send_response = TRUE)
+	public static function HTML5_upload($destpath, $file_prefix = '', $send_response = TRUE)
 	{
 	
 		// Normalize path
@@ -148,7 +149,7 @@ class Mooupload
 	      $response['finish'] = TRUE;
 	      
 	      /* If uploaded file is finished, maybe you are interested in saving, registering or moving the file */
-				// my_save_file($destpath.$filename, $response['name']);
+				// my_save_file($destpath.$filename, $file_prefix.$response['name']);
 	    }
 	  } 
 	    
@@ -175,9 +176,9 @@ class Mooupload
 	 * @return	array		Response
 	 * 
 	 */
-	public static function upload($destpath, $send_response = TRUE)
+	public static function upload($destpath, $file_prefix = '', $send_response = TRUE)
 	{			
-		return self::is_HTML5_upload() ? self::HTML5_upload($destpath, $send_response) : self::HTML4_upload($destpath, $send_response);		
+		return self::is_HTML5_upload() ? self::HTML5_upload($destpath, $file_prefix, $send_response) : self::HTML4_upload($destpath, $file_prefix, $send_response);		
 	}	 		 	 	
 	
 	
